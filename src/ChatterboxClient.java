@@ -220,7 +220,7 @@ public class ChatterboxClient {
 
         String login = userInput.nextLine();
 
-        
+
 
         String response = serverReader.readLine();
         if (response == null || !response.startsWith("Welcome")) {
@@ -244,7 +244,7 @@ public class ChatterboxClient {
      * @throws IOException
      */
     public void streamChat() throws IOException {
-        throw new UnsupportedOperationException("Chat streaming not yet implemented. Implement streamChat() and remove this exception!");
+       printIncomingChats();
     }
 
     /**
@@ -260,11 +260,22 @@ public class ChatterboxClient {
      * - Do NOT use System.out directly.
      * - If an IOException happens, treat it as disconnect:
      *   print a message to userOutput and exit.
+     * @throws IOException 
      */
-    public void printIncomingChats() {
-        // Listen on serverReader
-        // Write to userOutput, NOT System.out
+   public void printIncomingChats() throws IOException {
+    try {
+        String line;
+        while ((line = serverReader.readLine()) != null) {
+            userOutput.write((line + "\n").getBytes(StandardCharsets.UTF_8));
+            userOutput.flush();
+        }      
+    }finally{
+        userOutput.write("Disconnected from server\n".getBytes(StandardCharsets.UTF_8));
+        userOutput.flush();
+        System.exit(1);
     }
+}
+
 
     /**
      * Continuously read user-typed messages and send them to the server.
