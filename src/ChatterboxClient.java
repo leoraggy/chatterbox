@@ -131,7 +131,9 @@ public class ChatterboxClient {
 
         if(args.length != 4) throw new IllegalArgumentException("Argument must be 4 inputs");
 
-        
+        int port = Integer.parseInt(args[1]);
+
+        if(port < 1 || port > 65535) throw new IllegalArgumentException("Port must be between 1 and 65535");
        
     }
 
