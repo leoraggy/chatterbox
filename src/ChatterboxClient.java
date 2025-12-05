@@ -2,7 +2,10 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
@@ -205,10 +208,27 @@ public class ChatterboxClient {
      * @throws IOException for network errors
      * @throws IllegalArgumentException for bad credentials / server rejection
      */
-    public void authenticate() throws IOException, IllegalArgumentException {
-        throw new UnsupportedOperationException("Authenticate not yet implemented. Implement authenticate() and remove this exception!");
-        // Hint: use the username/password instance variables, DO NOT READ FROM userInput
-        // send messages using serverWriter (don't forget to flush!)
+   public void authenticate() throws IOException, IllegalArgumentException {
+        String initialPrompt = serverReader.readLine();
+        if (initialPrompt != null) {
+            userOutput.write((initialPrompt + "\n").getBytes(StandardCharsets.UTF_8));
+            userOutput.flush();
+        }
+
+        serverWriter.write(username + " " + password + "\n");
+        serverWriter.flush();
+
+        String login = userInput.nextLine();
+
+        
+
+        String response = serverReader.readLine();
+        if (response == null || !response.startsWith("Welcome")) {
+            throw new IllegalArgumentException(response);
+        }
+
+        userOutput.write((response + "\n").getBytes(StandardCharsets.UTF_8));
+        userOutput.flush();
     }
 
     /**
