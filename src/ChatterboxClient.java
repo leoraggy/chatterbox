@@ -173,10 +173,16 @@ public class ChatterboxClient {
      * @throws IOException if the socket cannot be opened
      */
     public void connect() throws IOException {
-        throw new UnsupportedOperationException("Connect not yet implemented. Implement connect() and remove this exception!");
+        Socket socket = new Socket(this.host, this.port);
+        InputStream inputStream = socket.getInputStream();
+        OutputStream outputStream = socket.getOutputStream();
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream, java.nio.charset.StandardCharsets.UTF_8);
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(inputStream, java.nio.charset.StandardCharsets.UTF_8);
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
 
-        // Make sure to have this.serverReader and this.serverWriter set by the end of this method!
-        // hint: get the streams from the sockets, use those to create the InputStreamReader/OutputStreamWriter and the BufferedReader/BufferedWriter
+        this.serverReader = bufferedReader;
+        this.serverWriter = bufferedWriter;
     }
 
     /**
