@@ -177,7 +177,7 @@ public class ChatterboxClient {
         InputStream inputStream = socket.getInputStream();
         OutputStream outputStream = socket.getOutputStream();
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream, java.nio.charset.StandardCharsets.UTF_8);
-        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(inputStream, java.nio.charset.StandardCharsets.UTF_8);
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, java.nio.charset.StandardCharsets.UTF_8);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
         BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
 
