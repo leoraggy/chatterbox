@@ -249,7 +249,11 @@ public class ChatterboxClient {
      * @throws IOException
      */
     public void streamChat() throws IOException {
-       printIncomingChats();
+       Thread printThread = new Thread(() -> printIncomingChats());
+    Thread sendChatThread = new Thread(() -> sendOutgoingChats());
+
+        printThread.start();
+        sendChatThread.start();
     }
 
     /**
@@ -267,17 +271,19 @@ public class ChatterboxClient {
      *   print a message to userOutput and exit.
      * @throws IOException 
      */
-   public void printIncomingChats() throws IOException {
+   public void printIncomingChats(){
     try {
         String line;
         while ((line = serverReader.readLine()) != null) {
             userOutput.write((line + "\n").getBytes(StandardCharsets.UTF_8));
             userOutput.flush();
         }      
-    }finally{
-        userOutput.write("Disconnected from server\n".getBytes(StandardCharsets.UTF_8));
-        userOutput.flush();
-        System.exit(1);
+
+         }catch(IOException e){
+        try {
+            userOutput.write("Disconnected from server\n".getBytes(StandardCharsets.UTF_8));
+        } catch (IOException ex) {
+        }
     }
 }
 
@@ -298,16 +304,19 @@ public class ChatterboxClient {
         // Use the userInput to read, NOT System.in directly
         // loop forever reading user input
         // write to serverOutput
-        try{
-            while(true){
+
+        while(true){
+            try {
                 String input = userInput.nextLine();
                 userOutput.write((input + "\n").getBytes(StandardCharsets.UTF_8));
                 userOutput.flush();
+            } catch (IOException e) {
+                try {
+                    userOutput.write("Disconnected from server\n".getBytes(StandardCharsets.UTF_8));
+                    userOutput.flush();
+                } catch (IOException ex) {
+                }
             }
-        }finally{
-            userOutput.write("Disconnected from server\n".getBytes(StandardCharsets.UTF_8));
-            userOutput.flush();
-            System.exit(1);
         }
     }
 
