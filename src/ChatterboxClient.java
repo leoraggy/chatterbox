@@ -249,8 +249,8 @@ public class ChatterboxClient {
      * @throws IOException
      */
     public void streamChat() throws IOException {
-       Thread printThread = new Thread(() -> printIncomingChats());
-    Thread sendChatThread = new Thread(() -> sendOutgoingChats());
+        Thread printThread = new Thread(() -> printIncomingChats());
+        Thread sendChatThread = new Thread(() -> sendOutgoingChats());
 
         printThread.start();
         sendChatThread.start();
@@ -300,7 +300,7 @@ public class ChatterboxClient {
      * - If writing fails (IOException), the connection is gone:
      *   print a message to userOutput and exit.
      */
-    public void sendOutgoingChats() throws IOException {
+    public void sendOutgoingChats() {
         // Use the userInput to read, NOT System.in directly
         // loop forever reading user input
         // write to serverOutput
