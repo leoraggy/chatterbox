@@ -218,9 +218,14 @@ public class ChatterboxClient {
         serverWriter.write(username + " " + password + "\n");
         serverWriter.flush();
 
+        String correctLogin = username + " " + password;
         String login = userInput.nextLine();
 
-
+        while(!correctLogin.equals(login)){
+            userOutput.write("Incorrect username or password.\n".getBytes(StandardCharsets.UTF_8));
+            userOutput.flush();
+            login = userInput.nextLine();
+        }        
 
         String response = serverReader.readLine();
         if (response == null || !response.startsWith("Welcome")) {
