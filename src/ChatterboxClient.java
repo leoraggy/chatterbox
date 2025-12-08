@@ -208,33 +208,30 @@ public class ChatterboxClient {
      * @throws IOException for network errors
      * @throws IllegalArgumentException for bad credentials / server rejection
      */
-   public void authenticate() throws IOException, IllegalArgumentException {
-        String initialPrompt = serverReader.readLine();
-        if (initialPrompt != null) {
-            userOutput.write((initialPrompt + "\n").getBytes(StandardCharsets.UTF_8));
-            userOutput.flush();
-        }
-
-        serverWriter.write(username + " " + password + "\n");
-        serverWriter.flush();
-
-        String correctLogin = username + " " + password;
-        String login = userInput.nextLine();
-
-        while(!correctLogin.equals(login)){
-            userOutput.write("Incorrect username or password.\n".getBytes(StandardCharsets.UTF_8));
-            userOutput.flush();
-            login = userInput.nextLine();
-        }        
-
-        String response = serverReader.readLine();
-        if (response == null || !response.startsWith("Welcome")) {
-            throw new IllegalArgumentException(response);
-        }
-
-        userOutput.write((response + "\n").getBytes(StandardCharsets.UTF_8));
+public void authenticate() throws IOException, IllegalArgumentException {
+    String initialPrompt = serverReader.readLine();
+    if (initialPrompt != null) {
+        userOutput.write((initialPrompt + "\n").getBytes(StandardCharsets.UTF_8));
         userOutput.flush();
     }
+     String login = username + " " + password + "\n";
+
+    serverWriter.write(login);
+    serverWriter.flush();
+
+   
+
+    userOutput.write(login.getBytes(StandardCharsets.UTF_8));
+    userOutput.flush();
+
+    String response = serverReader.readLine();
+    if (response == null || !response.startsWith("Welcome")) {
+        throw new IllegalArgumentException(response);
+    }
+
+    userOutput.write((response + "\n").getBytes(StandardCharsets.UTF_8));
+    userOutput.flush();
+}
 
     /**
      * Start full-duplex chat streaming. SEE INSTRUCTIONS FOR HOW TO DO THIS PART BY PART
